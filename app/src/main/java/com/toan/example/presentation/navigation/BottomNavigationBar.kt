@@ -1,6 +1,7 @@
 package com.toan.example.presentation.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
@@ -12,12 +13,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.google.gson.Gson
+import com.toan.example.domain.model.User
+import java.net.URLEncoder
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
         BottomNavItem.Home,
-        BottomNavItem.Profile,
+        BottomNavItem.History,
         BottomNavItem.Settings
     )
 
@@ -31,7 +35,7 @@ fun BottomNavigationBar(navController: NavController) {
                 selected = currentRoute == item.route,
                 onClick = {
                     navController.navigate(item.route) {
-                        popUpTo(navController.graph.startDestinationId) { saveState = true }
+                        popUpTo(BottomNavItem.Home.route) { inclusive = false }
                         launchSingleTop = true
                         restoreState = true
                     }
@@ -43,6 +47,14 @@ fun BottomNavigationBar(navController: NavController) {
 
 sealed class BottomNavItem(val title: String, val icon: ImageVector, val route: String) {
     data object Home : BottomNavItem("Home", Icons.Filled.Home, "home")
-    data object Profile : BottomNavItem("Profile", Icons.Filled.Person, "profile")
+    data object History : BottomNavItem("History", Icons.Default.AccountBox, "history")
     data object Settings : BottomNavItem("Setting", Icons.Filled.Settings, "setting")
+    data object Detail : BottomNavItem("Detail", Icons.Filled.Settings, "detail/{user}"){
+        fun createRoute(user: User): String {
+            val json = Gson().toJson(user)
+            val encodeJson =  URLEncoder.encode(json,"UTF-8")
+            return "detail/$encodeJson"
+        }
+
+    }
 }

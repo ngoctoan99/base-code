@@ -26,13 +26,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.toan.example.domain.model.User
+import com.toan.example.presentation.navigation.BottomNavItem
 import com.toan.example.presentation.screen.userScreen.viewModel.UserViewModel
 
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun UserScreen(userViewModel: UserViewModel) {
+fun UserScreen(userViewModel: UserViewModel,navController: NavHostController) {
     val users by userViewModel.users.collectAsState()
 
     Scaffold { padding ->
@@ -41,7 +43,7 @@ fun UserScreen(userViewModel: UserViewModel) {
             contentPadding = padding
         ) {
             items(users) { user ->
-                UserItem(user, userViewModel)
+                UserItem(user, userViewModel,navController)
             }
         }
     }
@@ -49,7 +51,7 @@ fun UserScreen(userViewModel: UserViewModel) {
 
 
 @Composable
-fun UserItem(user: User, userViewModel: UserViewModel, isDelete: Boolean = false) {
+fun UserItem(user: User, userViewModel: UserViewModel,navController: NavHostController, isDelete: Boolean = false) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -59,7 +61,9 @@ fun UserItem(user: User, userViewModel: UserViewModel, isDelete: Boolean = false
                     userViewModel.deleteUser(user)
                 } else {
                     userViewModel.addUser(user)
+                    navController.navigate(BottomNavItem.Detail.createRoute(user))
                 }
+
 
             },
         elevation = CardDefaults.cardElevation(4.dp)
