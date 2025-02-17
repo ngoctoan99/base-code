@@ -56,3 +56,17 @@ fun ExampleComposeKoltinTheme(
         content = content
     )
 }
+
+@Composable
+fun AppTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+){
+    val color = if(darkTheme) DarkColorScheme else LightColorScheme
+    MaterialTheme(
+        colorScheme = color,
+        typography =  Typography,
+        content = content
+    )
+
+}

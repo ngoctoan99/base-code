@@ -1,5 +1,6 @@
 package com.toan.example.di
 import android.content.Context
+import android.content.SharedPreferences
 import com.toan.example.data.api.ApiService
 import com.toan.example.data.local.AppDatabase
 import com.toan.example.data.local.UserDatabaseRepository
@@ -66,6 +67,10 @@ object AppModule {
     @Singleton
     fun provideUserDatabaseRepository(userDao: UserDao): UserDatabaseRepository {
         return UserDatabaseRepository(userDao)
+    }
 
+    @Provides
+    fun provideSharedPreferences(context: Context): SharedPreferences {
+        return context.getSharedPreferences("BASE_PREFS_LOCAL", Context.MODE_PRIVATE)
     }
 }
