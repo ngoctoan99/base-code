@@ -17,7 +17,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,6 +29,7 @@ import androidx.navigation.NavHostController
 import com.toan.example.domain.model.User
 import com.toan.example.presentation.navigation.BottomNavItem
 import com.toan.example.presentation.screen.userScreen.viewModel.UserViewModel
+import com.toan.example.ui.components.AppText
 
 
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -80,18 +80,18 @@ fun UserItem(user: User, userViewModel: UserViewModel,navController: NavHostCont
                     .background(Color.Red, shape = CircleShape),
                 contentAlignment = Alignment.Center,
             ) {
-                Text(
+                AppText(
                     text = "${user.id}",
                     style = MaterialTheme.typography.bodyLarge,
-                    fontSize = 16.sp,
+                    fontSize = 20.sp,
                     color = Color.White
                 )
             }
             Column(modifier = Modifier.padding(16.dp))
             {
-                Text(text = "ID: ${user.id}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "Name: ${user.name}", style = MaterialTheme.typography.bodyLarge)
-                Text(text = "Email: ${user.email}", style = MaterialTheme.typography.bodySmall)
+                AppText(text = "ID: ${user.id}",style = MaterialTheme.typography.bodyLarge, fontSize = 20.sp)
+                AppText(text = "Name: ${user.name}", style = MaterialTheme.typography.bodyLarge, fontSize = 20.sp)
+                AppText(text = "Email: ${user.email}", style = MaterialTheme.typography.bodyLarge, fontSize = 20.sp)
             }
         }
 
