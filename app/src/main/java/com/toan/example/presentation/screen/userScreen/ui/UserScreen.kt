@@ -18,8 +18,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +32,7 @@ import androidx.navigation.NavHostController
 import com.toan.example.domain.model.User
 import com.toan.example.presentation.navigation.BottomNavItem
 import com.toan.example.presentation.screen.userScreen.viewModel.UserViewModel
+import com.toan.example.ui.components.AppDialog
 import com.toan.example.ui.components.AppText
 
 
@@ -52,13 +56,21 @@ fun UserScreen(userViewModel: UserViewModel,navController: NavHostController) {
 
 @Composable
 fun UserItem(user: User, userViewModel: UserViewModel,navController: NavHostController, isDelete: Boolean = false) {
+
+    val openDialog: MutableState<Boolean> = remember { mutableStateOf(false) }
+
+    fun deleteUser(){
+        openDialog.value = false
+        userViewModel.deleteUser(user)
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)
             .clickable {
                 if (isDelete) {
-                    userViewModel.deleteUser(user)
+                   openDialog.value = true
                 } else {
                     userViewModel.addUser(user)
                     navController.navigate(BottomNavItem.Detail.createRoute(user))
@@ -93,6 +105,13 @@ fun UserItem(user: User, userViewModel: UserViewModel,navController: NavHostCont
                 AppText(text = "Name: ${user.name}", style = MaterialTheme.typography.bodyLarge, fontSize = 20.sp)
                 AppText(text = "Email: ${user.email}", style = MaterialTheme.typography.bodyLarge, fontSize = 20.sp)
             }
+
+        }
+        if (openDialog.value){
+            AppDialog(
+                onDismiss = {openDialog.value = false},
+                onConfirm = {deleteUser()}
+            )
         }
 
     }
